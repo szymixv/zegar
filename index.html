@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Odliczanie</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;      /* czarne tło */
+            color: #fff;                 /* biały tekst */
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        #timer {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        #message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        #goButton {
+            display: none;               /* ukryty na start */
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            cursor: pointer;
+        }
+
+        #goButton:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="message">Odliczanie do przejścia na stronę:</div>
+    <div id="timer"></div>
+    <button id="goButton" onclick="window.location.href='https://szymixv.github.io/slonce/'">
+        Przejdź do strony
+    </button>
+
+    <script>
+        // czas w sekundach, po którym ma się pojawić przycisk
+        let czas = 10; // ZMIEŃ TUTAJ, jeśli chcesz inny czas
+
+        const timerElement = document.getElementById('timer');
+        const button = document.getElementById('goButton');
+
+        function aktualizujTimer() {
+            timerElement.textContent = czas + " s";
+            if (czas <= 0) {
+                clearInterval(interval);
+                timerElement.textContent = "Czas minął!";
+                button.style.display = "inline-block"; // pokaż przycisk
+            }
+            czas--;
+        }
+
+        // start od razu po załadowaniu
+        aktualizujTimer();
+        const interval = setInterval(aktualizujTimer, 1000);
+    </script>
+
+</body>
+</html>
