@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>Odliczanie</title>
 
+    <!-- EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script>
         (function() {
-            emailjs.init("yPRPwU29w-Icq4hK6"); // ← Wklej swój PUBLIC KEY
+            emailjs.init("TWÓJ_PUBLIC_KEY");
         })();
     </script>
 
@@ -73,43 +74,36 @@
     <button id="goButton" onclick="window.location.href='https://szymixv.github.io/slonce/'">PRZEJDŹ</button>
 
 <script>
-    const START_TIME = 10; // czas odliczania
+    const START_TIME = 10;
 
     function startProcess() {
         const name = document.getElementById("username").value.trim();
         if (!name) return alert("Podaj imię!");
 
-        // Pobieranie geolokalizacji z ipapi.co
-        fetch("https://ipapi.co/json/")
-            .then(res => res.json())
-            .then(data => {
-                const country = data.country_name || "Nieznane";
-                const city = data.city || "Nieznane";
+        // Dane urządzenia
+        const device = navigator.userAgent;
+        const language = navigator.language;
+        const resolution = window.screen.width + "x" + window.screen.height;
+        const time = new Date().toLocaleString();
 
-                // Dane urządzenia
-                const device = navigator.userAgent;
-                const language = navigator.language;
-                const resolution = window.screen.width + "x" + window.screen.height;
-                const time = new Date().toLocaleString();
+        // Wysyłka maila w tle — NIE BLOKUJE STRONY
+        emailjs.send("TWOJE_SERVICE_ID", "TWOJE_TEMPLATE_ID", {
+            name: name,
+            device: device,
+            language: language,
+            resolution: resolution,
+            time: time
+        })
+        .then(() => {
+            console.log("Email wysłany");
+        })
+        .catch(err => {
+            console.log("EmailJS błąd:", err);
+        });
 
-                // Wysyłanie maila
-                emailjs.send("service_oaglepf", "template_lsjnbvq", {
-                    name: name,
-                    device: device,
-                    language: language,
-                    resolution: resolution,
-                    time: time,
-                    country: country,
-                    city: city
-                });
-
-                // Ukrycie formularza i start odliczania
-                document.getElementById("nameBox").style.display = "none";
-                startTimer();
-            })
-            .catch(() => {
-                alert("Błąd pobierania lokalizacji");
-            });
+        // Strona działa dalej niezależnie od EmailJS
+        document.getElementById("nameBox").style.display = "none";
+        startTimer();
     }
 
     function startTimer() {
@@ -130,7 +124,6 @@
         }, 1000);
     }
 </script>
-
 
 </body>
 </html>
